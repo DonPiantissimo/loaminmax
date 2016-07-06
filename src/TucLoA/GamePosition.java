@@ -79,6 +79,20 @@ public class GamePosition {
 	public void lineMapInit(){
 		Trinary[][] formation = new Trinary[BOARD_SIZE][BOARD_SIZE-1];
 		lineMap = new Line[BOARD_SIZE][3^(BOARD_SIZE-1)][BOARD_SIZE];
+		for (int len=3;len<=BOARD_SIZE;len++){
+			formation[len][len-2] = new Trinary((byte)0);
+			for (int i=len-3;i>=0;i--)
+				formation[len][i]= new Trinary ((byte)0,formation[len][i+1]);
+			formation[len][len-2].setNext(formation[len][0]);
+			for (int i=0;i<len;i++){
+				for (int k=0;k<len-1;k++)
+					formation[len][k].reset();
+				for (int j=0;j<3^(len-1);j++){
+					lineMap[len][j][i] = new Line(i, len, EMPTY, formation[len]);
+					formation[len][0].increment;
+				}
+			}
+		}
 		
 		
 	}
