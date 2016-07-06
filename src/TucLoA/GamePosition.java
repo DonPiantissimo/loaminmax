@@ -10,7 +10,7 @@ public class GamePosition {
 
 	final int NUMBER_OF_PIECES = 12;	
 	public int sumOfMinimalDistances[];
-	private Line lineMap[][];
+	private Line lineMap[][][];
 	
 	public GamePosition() {
 		board = new byte[BOARD_SIZE][BOARD_SIZE];
@@ -58,11 +58,11 @@ public class GamePosition {
 	
 	public void lineMapInit(){
 		Trinary[] formation = new Trinary[BOARD_SIZE-1];
+		lineMap = new Line[BOARD_SIZE][3^(BOARD_SIZE-1)][BOARD_SIZE];
 		formation[BOARD_SIZE-2] = new Trinary((byte)0);
 		for (int i=BOARD_SIZE-3;i>=0;i--)
 			formation[i] = new Trinary((byte)0,formation[i+1]);
 		formation[BOARD_SIZE-2].setNext(formation[0]);
-		lineMap = new Line[3^(BOARD_SIZE-1)][BOARD_SIZE];
 		for (int i=0;i<BOARD_SIZE;i++){
 			for (int k=0;k<BOARD_SIZE-1;k++)
 				formation[k].reset();
@@ -72,5 +72,71 @@ public class GamePosition {
 			}
 		}
 				
+	}
+	
+	
+	//WIP
+	public void lineMapInit(){
+		Trinary[][] formation = new Trinary[BOARD_SIZE][BOARD_SIZE-1];
+		lineMap = new Line[BOARD_SIZE][3^(BOARD_SIZE-1)][BOARD_SIZE];
+		
+		
+	}
+	
+	public double getPieceValue(int x, int y){
+		int[] keys = new int[4];
+		int form_key=0;
+		int xydif;
+		byte myColor = board[x][y];
+		byte oppColor = 0;
+		if (myColor==0) oppColor=(byte)1;
+		
+		//horizontal
+		for (int i=0;i<x;i++){
+			if (board[i][y]==EMPTY)
+				form_key+=2*(3^i);
+			else if (board[i][y]==oppColor)
+				form_key+=3^i;
+		}
+		for (int i=x+1;i<BOARD_SIZE;i++){
+			if (board[i][y]==EMPTY)
+				form_key+=2*(3^i);
+			else if (board[i][y]==oppColor)
+				form_key+=3^i;
+		}
+		keys[0]=form_key;
+		
+		//vertical
+		form_key=0;
+		for (int i=0;i<y;i++){
+			if (board[x][i]==EMPTY)
+				form_key+=2*(3^i);
+			else if (board[x][i]==oppColor)
+				form_key+=3^i;
+		}
+		for (int i=y+1;i<BOARD_SIZE;i++){
+			if (board[x][i]==EMPTY)
+				form_key+=2*(3^i);
+			else if (board[x][i]==oppColor)
+				form_key+=3^i;
+		}
+		keys[1]=form_key;
+		
+		//positive diagonal
+		//unfinished
+		form_key=0;
+		
+		if (x<=y){
+			xydif=y-x;
+			for (int i=0;i<x;i++){
+				if (board[i][i+xydif]==EMPTY)
+					form_key+=2*(3^i);
+				else if (board[i][i+xydif]==oppColor)
+					form_key+=3^i;
+			}
+		}
+		
+		
+			
 	}
 }
