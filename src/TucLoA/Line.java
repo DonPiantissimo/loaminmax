@@ -15,11 +15,13 @@ public class Line {
   private double value_neg = 1;
   private double value;
   
-  public Line(int order, byte BOARD_SIZE, byte EMPTY, byte[] formation){
+  public Line(int order, byte BOARD_SIZE, byte EMPTY, Trinary[] formation){
     this.order = order;
     this.BOARD_SIZE = BOARD_SIZE;
     this.EMPTY = EMPTY;
-    System.arraycopy(this.formation,0,formation,0,BOARD_SIZE);
+    for (int i=0;i<BOARD_SIZE;i++){
+      this.formation[i]=formation[i].digit;
+    }
 
     findMoveDistance();
     value=getValue();
