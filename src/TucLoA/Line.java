@@ -55,7 +55,9 @@ public class Line {
           }
         }
     }
-    
+    if (formation[order+moveDistance]==OPP)
+      value_pos*=2;
+      
     if (order - moveDistance < 0)
       value_pos=0;
     else {
@@ -71,6 +73,8 @@ public class Line {
           }
         }
     }
+    if (formation[order-moveDistance]==OPP)
+      value_pos*=2;
     
     return value_pos+value_neg;
   }
