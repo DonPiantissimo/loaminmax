@@ -14,6 +14,10 @@ public class Trinary {
     this.digit = digit;
   }
   
+  public void setNext (Trinary next){
+    this.next=next;
+  }
+  
   public byte increment(){
     digit++;
     if (digit==LIMIT){
@@ -21,5 +25,9 @@ public class Trinary {
       next.increment();
     }
     return digit;
+  }
+  
+  public void reset(){
+    digit=0;
   }
 }
