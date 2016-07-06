@@ -8,7 +8,7 @@ public class Line {
   private byte formation[];
   private int moveDistance;
   
-  private byte BOARD_SIZE;
+  private byte length;
   private byte EMPTY;
   
   public double value_pos = 1;
@@ -23,14 +23,14 @@ public class Line {
   private boolean pos_end = false;
   private boolean neg_end = false;
   
-  public Line(int order, byte BOARD_SIZE, byte EMPTY, Trinary[] formation){
+  public Line(int order, byte length, byte EMPTY, Trinary[] formation){
     this.order = order;
-    this.BOARD_SIZE = BOARD_SIZE;
+    this.length = length;
     this.EMPTY = EMPTY;
     for (int i=0;i<order;i++){
       this.formation[i]=formation[i].digit;
     formation[order]=SELF;
-    for (int i=order+1;i<BOARD_SIZE;i++)
+    for (int i=order+1;i<length;i++)
       this.formation[i]=formation[i-1].digit
     }
 
@@ -42,19 +42,19 @@ public class Line {
   
   public void findMoveDistance(){
         moveDistance=0;
-    for (int i=0;i<BOARD_SIZE;i++)
+    for (int i=0;i<length;i++)
       if (formation[i]!=EMPTY)
         moveDistance++;
   }
   
   public double getValue(){
-    if (order + moveDistance >= BOARD_SIZE)
+    if (order + moveDistance >= length)
       value_pos=0;
     else {
       if (formation[order+moveDistance]==SELF)
         value_pos=0;
       else {
-        if (order+moveDistance==BOARD_SIZE-1){
+        if (order+moveDistance==length-1){
           value_pos*=0.5;
           pos_end=true;
         }
