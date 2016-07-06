@@ -19,8 +19,11 @@ public class Line {
     this.order = order;
     this.BOARD_SIZE = BOARD_SIZE;
     this.EMPTY = EMPTY;
-    for (int i=0;i<BOARD_SIZE;i++){
+    for (int i=0;i<order;i++){
       this.formation[i]=formation[i].digit;
+    formation[order]=SELF;
+    for (int i=order+1;i<BOARD_SIZE;i++)
+      this.formation[i]=formation[i-1].digit
     }
 
     findMoveDistance();
@@ -40,7 +43,7 @@ public class Line {
     if (order + moveDistance >= BOARD_SIZE)
       value_pos=0;
     else {
-      if (formation[order+moveDistance]==OWN)
+      if (formation[order+moveDistance]==SELF)
         value_pos=0;
       else {
         if (order+moveDistance==BOARD_SIZE-1)
@@ -56,7 +59,7 @@ public class Line {
     if (order - moveDistance < 0)
       value_pos=0;
     else {
-      if (formation[order-moveDistance]==OWN)
+      if (formation[order-moveDistance]==SELF)
         value_pos=0;
       else {
         if (order-moveDistance==0)
