@@ -10,6 +10,10 @@ public class Trinary {
     this.next = next;
   }
   
+  public Trinary (byte digit){
+    this.digit = digit;
+  }
+  
   public byte increment(){
     digit++;
     if (digit==LIMIT){
