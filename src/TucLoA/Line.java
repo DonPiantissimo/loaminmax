@@ -11,9 +11,9 @@ public class Line {
   private byte BOARD_SIZE;
   private byte EMPTY;
   
-  private double value_pos = 1;
-  private double value_neg = 1;
-  private double value;
+  public double value_pos = 1;
+  public double value_neg = 1;
+  public double value;
   
   public Line(int order, byte BOARD_SIZE, byte EMPTY, Trinary[] formation){
     this.order = order;
