@@ -77,8 +77,8 @@ public class GamePosition {
 	
 	//WIP
 	public void lineMapInit(){
-		Trinary[][] formation = new Trinary[BOARD_SIZE][BOARD_SIZE-1];
-		lineMap = new Line[BOARD_SIZE][3^(BOARD_SIZE-1)][BOARD_SIZE];
+		Trinary[][] formation = new Trinary[BOARD_SIZE+1][BOARD_SIZE-1];
+		lineMap = new Line[BOARD_SIZE+1][3^(BOARD_SIZE-1)][BOARD_SIZE];
 		for (int len=3;len<=BOARD_SIZE;len++){
 			formation[len][len-2] = new Trinary((byte)0);
 			for (int i=len-3;i>=0;i--)
@@ -137,7 +137,6 @@ public class GamePosition {
 		keys[1]=form_key;
 		
 		//positive diagonal
-		//unfinished
 		form_key=0;
 		
 		if (x<=y){
@@ -148,9 +147,45 @@ public class GamePosition {
 				else if (board[i][i+xydif]==oppColor)
 					form_key+=3^i;
 			}
+			for (int i=x+1;i+xydif<BOARD_SIZE;i++){
+				if (board[i][i+xydif]==EMPTY)
+					form_key+=2*(3^i);
+				else if (board[i][i+xydif]==oppColor)
+					form_key+=3^i;
+			}
+		}
+		else {
+			xydif=x-y
+			for (int i=0;i<y;i++){
+				if (board[i+xydif][i]==EMPTY)
+					form_key+=2*(3^i);
+				else if (board[i][i+xydif]==oppColor)
+					form_key+=3^i;
+			}
+			for (int i=y+1;i+xydif<BOARD_SIZE;i++){
+				if (board[i+xydif][i]==EMPTY)
+					form_key+=2*(3^i);
+				else if (board[i+xydif][i]==oppColor)
+					form_key+=3^i;
+			}
 		}
 		
+		//negative diagonal
+		form_key = 0;
 		
+		if (x+y<BOARD_SIZE-1){
+			xydif=x+y;
+			for (int i=0;i<x;i++){
+				if (board[i][-i+xydif]==EMPTY)
+					form_key+=2*(3^i);
+				else if (board[i][i+xydif]==oppColor)
+					form_key+=3^i;
+			}
+			for (int i=x+1;-i+xydif>=0;i++){
+				
+			
+			}
+		}
 			
 	}
 }
