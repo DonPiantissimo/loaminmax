@@ -22,6 +22,8 @@ public class Line {
   
   private boolean pos_end = false;
   private boolean neg_end = false;
+  private boolean block_high = false;
+  private boolean block_low = false;
   
   public Line(int order, byte length, byte EMPTY, Trinary[] formation){
     this.order = order;
@@ -61,6 +63,7 @@ public class Line {
         for (int i=order+1;i<order+moveDistance;i++)
           if (formation[order]==OPP){
             value_pos=0;
+            block_high = true;
             break;
           }
         }
@@ -81,6 +84,7 @@ public class Line {
         for (int i=order-1;i>order-moveDistance;i--)
           if (formation[order]==OPP){
             value_neg=0;
+            block_low = true;
             break;
           }
         }
@@ -101,6 +105,12 @@ public class Line {
     else diag_neg_value = value_neg;
     
     return diag_pos_value+diag_neg_value;
+  }
+  
+  public boolean getBlock(){
+    if (order<4)
+      return block_low;
+    return block_high;
   }
   
 }
