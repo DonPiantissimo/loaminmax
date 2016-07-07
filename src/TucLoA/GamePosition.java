@@ -105,6 +105,9 @@ public class GamePosition {
 		byte oppColor = 0;
 		if (myColor==0) oppColor=(byte)1;
 		
+		double pieceValue=0;
+		double tempValue;
+		
 		//horizontal
 		for (int i=0;i<x;i++){
 			if (board[i][y]==EMPTY)
@@ -114,9 +117,9 @@ public class GamePosition {
 		}
 		for (int i=x+1;i<BOARD_SIZE;i++){
 			if (board[i][y]==EMPTY)
-				form_key+=2*(3^i);
+				form_key+=2*(3^(i-1));
 			else if (board[i][y]==oppColor)
-				form_key+=3^i;
+				form_key+=3^(i-1);
 		}
 		keys[0]=form_key;
 		
@@ -130,9 +133,9 @@ public class GamePosition {
 		}
 		for (int i=y+1;i<BOARD_SIZE;i++){
 			if (board[x][i]==EMPTY)
-				form_key+=2*(3^i);
+				form_key+=2*(3^(i-1));
 			else if (board[x][i]==oppColor)
-				form_key+=3^i;
+				form_key+=3^(i-1);
 		}
 		keys[1]=form_key;
 		
@@ -149,9 +152,9 @@ public class GamePosition {
 			}
 			for (int i=x+1;i+xydif<BOARD_SIZE;i++){
 				if (board[i][i+xydif]==EMPTY)
-					form_key+=2*(3^i);
+					form_key+=2*(3^(i-1));
 				else if (board[i][i+xydif]==oppColor)
-					form_key+=3^i;
+					form_key+=3^(i-1);
 			}
 		}
 		else {
@@ -164,16 +167,17 @@ public class GamePosition {
 			}
 			for (int i=y+1;i+xydif<BOARD_SIZE;i++){
 				if (board[i+xydif][i]==EMPTY)
-					form_key+=2*(3^i);
+					form_key+=2*(3^(i-1));
 				else if (board[i+xydif][i]==oppColor)
-					form_key+=3^i;
+					form_key+=3^(i-1);
 			}
 		}
+		keys[2] = form_key;
 		
 		//negative diagonal
 		form_key = 0;
 		
-		if (x+y<BOARD_SIZE-1){
+		if (x+y<=BOARD_SIZE-1){
 			xydif=x+y;
 			for (int i=0;i<x;i++){
 				if (board[i][-i+xydif]==EMPTY)
@@ -182,10 +186,57 @@ public class GamePosition {
 					form_key+=3^i;
 			}
 			for (int i=x+1;-i+xydif>=0;i++){
-				
-			
+				if (board[i][-i+xydif]==EMPTY)
+					form_key+=2*(3^(i-1));
+				else if (board[i][i+xydif]==oppColor)
+					form_key+=3^(i-1);
 			}
 		}
+		else {
+			xydif = x+y
+			for (int i=0;BOARD_SIZE-1-i>y;i++){
+				if (board[xydif-BOARD_SIZE+1+i][BOARD_SIZE-1-i]==EMPTY)
+					form_key+=2*(3^i);
+				else if (board[xydif-BOARD_SIZE+1+i][BOARD_SIZE-1-i]==oppColor)
+					form_key+=3^i;
+			}
+			for (int i=BOARD_SIZE-y;xydif-BOARD_SIZE+1+i<BOARD_SIZE;i++){
+				if (board[xydif-BOARD_SIZE+1+i][BOARD_SIZE-1-i]==EMPTY)
+					form_key+=2*(3^(i-1));
+				else if (board[xydif-BOARD_SIZE+1+i][BOARD_SIZE-1-i]==oppColor)
+					form_key+=3^(i-1);
+			}
+		}
+		keys[3] = form_key;
+		
+		//Make lines, calculate value
+		
+		//horizontal
+		tempValue=lineMap[BOARD_SIZE][keys[0]][x].value;
+		if (x==0 || x==BOARD_SIZE)
+			tempValue*=0.5;
+		value+=tempValue;
+		
+		//vertical
+		tempValue=lineMap[BOARD_SIZE][keys[1]][y].value;
+		if (y==0 || y==BOARD_SIZE)
+			tempValue*=0.5;
+		value+=tempValue;
+		
+		//positive diagonal
+		if (x==y)
+			tempValue=lineMap[BOARD_SIZE-1-Math.abs(x-y)][keys[2]][x].diagValue;
+		else
+			tempValue=lineMap[BOARD_SIZE-1-Math.abs(x-y)][keys[2]][(x<y):x?y].value;
+		value+=tempValue;
+		
+		//negative diagonal
+		if (x+y==BOARD_SIZE-1)
+			tempValue=lineMap[x+y][keys[3]][x].diagValue;
+		else
+			tempValue=lineMap[x+y][keys[3]][(x+y<=BOARD_SIZE-1):x?(BOARD_SIZE-1-y)].value;
+		value+=tempValue;
 			
+		return value;
 	}
 }
